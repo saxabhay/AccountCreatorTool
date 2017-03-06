@@ -39,9 +39,11 @@ public class All_Account_Create extends JFrame implements ActionListener {
 	protected static String emailid;
 	protected static String mp;
 	protected static String password;
+	protected static String ECID;
+	protected static String expdate;
 	private JLabel nameLabel;
 	private JTextField nameTextField;
-
+	
 	public static void allinfo(String name, String emailid, String password, String ECID, String expdate) {
 		System.out.println("Your Name = " + name);
 
@@ -51,10 +53,11 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 		System.out.println("ECID of " + emailid + " = " + ECID);
 
-		System.out.println("Your Whitelisted acoount Expire Date = " + expdate);
+		System.out.println("Your Whitelisted Account Expire Date = " + expdate);
 
 		System.out.println("Your Account is Whitelisted");
 	}
+
 
 	public static void main(String[] args) {
 
@@ -97,7 +100,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 		contentPanel.add(passwordLabel);
 
 		emailIDTextField = new JTextField();
-		emailIDTextField.setFont(new Font("Sylfaen", Font.ITALIC, 13));
+		emailIDTextField.setFont(new Font("Sylfaen", Font.ITALIC, 16));
 		emailIDTextField.setBounds(227, 107, 246, 28);
 		contentPanel.add(emailIDTextField);
 		emailIDTextField.setColumns(10);
@@ -108,7 +111,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 		contentPanel.add(marketPlaceLabel);
 
 		comboBox_1 = new JComboBox<Object>(array);
-		comboBox_1.setFont(new Font("Times New Roman", Font.ITALIC, 13));
+		comboBox_1.setFont(new Font("Times New Roman", Font.ITALIC, 16));
 		comboBox_1.setBounds(261, 230, 121, 28);
 		comboBox_1.setEditable(false);
 		comboBox_1.setMaximumRowCount(10);
@@ -131,13 +134,13 @@ public class All_Account_Create extends JFrame implements ActionListener {
 		contentPanel.add(nameLabel);
 
 		nameTextField = new JTextField();
-		nameTextField.setFont(new Font("Sylfaen", Font.ITALIC, 13));
+		nameTextField.setFont(new Font("Sylfaen", Font.ITALIC, 16));
 		nameTextField.setColumns(10);
 		nameTextField.setBounds(227, 42, 246, 28);
 		contentPanel.add(nameTextField);
 
 		passwordField = new JTextField();
-		passwordField.setFont(new Font("Sylfaen", Font.ITALIC, 13));
+		passwordField.setFont(new Font("Sylfaen", Font.ITALIC, 16));
 		passwordField.setColumns(10);
 		passwordField.setBounds(227, 165, 246, 28);
 		contentPanel.add(passwordField);
@@ -251,7 +254,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -265,7 +268,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
 				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
@@ -297,6 +300,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				}
 				driver.quit();
 				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				
 			}
 
 			else if (mp.equals("US")) {
@@ -392,7 +396,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -406,7 +410,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
@@ -535,7 +539,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -549,7 +553,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
 				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
@@ -678,7 +682,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -692,7 +696,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
 				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
@@ -822,7 +826,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -836,7 +840,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
 				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
@@ -964,7 +968,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -978,7 +982,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
 				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
@@ -1009,8 +1013,8 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				}
 				driver.quit();
+				
 				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
-
 			}
 
 			else if (mp.equals("ES")) {
@@ -1106,7 +1110,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -1120,7 +1124,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
 				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
@@ -1248,7 +1252,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -1262,7 +1266,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
 				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
@@ -1366,7 +1370,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				String ecid = text.getText();
 
-				String ECID = ecid.substring(19, 33);
+				ECID = ecid.substring(19, 33);
 
 				driver.get("https://maswhitelisting.amazon.com");
 
@@ -1380,7 +1384,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				date.click();
 
 				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				String expdate = date.getAttribute("value");
+				expdate = date.getAttribute("value");
 				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
 				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
@@ -1440,6 +1444,50 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				System.out.println("Please Enter Valid Information");
 			}
+			JFrame myFrame = new JFrame("Account Created Details");
+			myFrame.setVisible(true);
+			myFrame.setBounds(50, 50, 800, 800);
+
+			JLabel Name = new JLabel("UserName = " + name);
+			Name.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
+			Name.setBackground(new Color(204, 204, 204));
+			Name.setBounds(71, 50, 500, 36);
+			myFrame.add(Name);
+
+			JLabel email = new JLabel("E-mail Id = " + emailid);
+			email.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
+			email.setBackground(new Color(204, 204, 204));
+			email.setBounds(71, 150, 500, 36);
+			myFrame.add(email);
+
+			JLabel pwd = new JLabel("Password = " + password);
+			pwd.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
+			pwd.setBackground(new Color(204, 204, 204));
+			pwd.setBounds(71, 250, 500, 36);
+			myFrame.add(pwd);
+
+			JLabel ecid = new JLabel("ECID = " + ECID);
+			ecid.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
+			ecid.setBackground(new Color(204, 204, 204));
+			ecid.setBounds(71, 350, 500, 36);
+			myFrame.add(ecid);
+
+			JLabel map = new JLabel("Market Place = " + mp);
+			map.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
+			map.setBounds(71, 450, 500, 36);
+			myFrame.add(map);
+
+			JLabel exp = new JLabel("EXP = " + expdate);
+			exp.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
+			exp.setBackground(new Color(204, 204, 204));
+			exp.setBounds(71, 550, 500, 36);
+			myFrame.add(exp);
+
+			JLabel blank = new JLabel("");
+			blank.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
+			blank.setBackground(new Color(204, 204, 204));
+			blank.setBounds(71, 470, 500, 36);
+			myFrame.add(blank);
 
 		}
 
