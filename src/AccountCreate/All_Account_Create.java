@@ -30,8 +30,11 @@ public class All_Account_Create extends JFrame implements ActionListener {
 	private JTextField passwordField;
 	private JTextField emailIDTextField;
 	private JLabel marketPlaceLabel;
-	final String[] array = { "Select Market Place", "US", "UK", "DE", "JP", "IT", "ES", "FR", "CA", "CN","IN" };
+	private JLabel whitelist;
+	final String[] array = { "Select Market Place", "US", "UK", "DE", "JP", "IT", "ES", "FR", "CA", "CN", "IN" };
 	final JComboBox<Object> comboBox_1;
+	final String[] array1 = { "Yes", "No" };
+	final JComboBox<Object> comboBox_2;
 	JLabel emailLabel;
 	JLabel passwordLabel;
 	JButton createButton;
@@ -42,6 +45,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 	protected static String password;
 	protected static String ECID;
 	protected static String expdate;
+	protected static String wl;
 	private JLabel nameLabel;
 	private JTextField nameTextField;
 
@@ -54,9 +58,11 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 		System.out.println("ECID of " + emailid + " = " + ECID);
 
-		System.out.println("Your Whitelisted Account Expire Date = " + expdate);
+		System.out.println(expdate);
 
-		System.out.println("Your Account is Whitelisted");
+		System.out.println(
+				"NOTE: For 'IN' and 'CA' COR & PFM is different. Kindly change manually before using the account");
+
 	}
 
 	public static void main(String[] args) {
@@ -80,7 +86,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 		setTitle("Account Creator V1.0 By ABHAY SAXENA");
 		setResizable(false);
 		setDefaultCloseOperation(3);
-		setBounds(100, 100, 600, 400);
+		setBounds(150, 150, 750, 550);
 
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -118,13 +124,26 @@ public class All_Account_Create extends JFrame implements ActionListener {
 		comboBox_1.setSelectedItem(array[0]);
 		contentPanel.add(comboBox_1);
 
+		whitelist = new JLabel("Whitelist");
+		whitelist.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 20));
+		whitelist.setBounds(71, 300, 109, 36);
+		contentPanel.add(whitelist);
+
+		comboBox_2 = new JComboBox<Object>(array1);
+		comboBox_2.setFont(new Font("Times New Roman", Font.ITALIC, 16));
+		comboBox_2.setBounds(261, 300, 120, 28);
+		comboBox_2.setEditable(false);
+		comboBox_2.setMaximumRowCount(10);
+		comboBox_2.setSelectedItem(array1[0]);
+		contentPanel.add(comboBox_2);
+
 		createButton = new JButton("Create Account");
-		createButton.setBounds(71, 297, 153, 44);
+		createButton.setBounds(71, 400, 153, 44);
 		contentPanel.add(createButton);
 		createButton.addActionListener(this);
 
 		closeButton = new JButton("Cancel");
-		closeButton.setBounds(380, 297, 136, 44);
+		closeButton.setBounds(380, 400, 136, 44);
 		contentPanel.add(closeButton);
 
 		nameLabel = new JLabel("Name");
@@ -160,6 +179,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 			emailid = emailIDTextField.getText();
 			password = passwordField.getText();
 			mp = (String) comboBox_1.getSelectedItem();
+			wl = (String) comboBox_2.getSelectedItem();
 			super.dispose();
 			if (mp.equals("UK")) {
 				System.out.println("Your UK account is Creating Please Wait...");
@@ -267,51 +287,56 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='UK'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='UK'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='UK'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='UK'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='UK'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='UK'])[3]")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					}
 
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
-
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
 
 			}
 
@@ -421,52 +446,56 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='US'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='US'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='US'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='US'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='US'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='US'])[3]")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					}
 
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
-
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
 
 			}
 
@@ -576,52 +605,55 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='DE'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='DE'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='DE'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='DE'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='DE'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='DE'])[3]")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					}
 
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
-
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
-
 			}
 
 			else if (mp.equals("JP")) {
@@ -731,52 +763,56 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='JP'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='JP'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='JP'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='JP'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='JP'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='JP'])[3]")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
+					}
+
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
-
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
-
 			}
 
 			else if (mp.equals("FR")) {
@@ -887,52 +923,56 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='FR'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='FR'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='FR'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='FR'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='FR'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='FR'])[3]")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
+					}
+
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
-
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
-
 			}
 
 			else if (mp.equals("IT")) {
@@ -1041,52 +1081,58 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='IT'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='IT'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='IT'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='IT'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='IT'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='IT'])[3]")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
+					}
+
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
 
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
 			}
 
 			else if (mp.equals("ES")) {
@@ -1195,52 +1241,56 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='ES'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='ES'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='ES'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='ES'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='ES'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='ES'])[3]")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
+					}
+
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
-
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
-
 			}
 
 			else if (mp.equals("CA")) {
@@ -1349,51 +1399,55 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='CA'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='CA'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='CA'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='CA'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='CA'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='CA'])[3]")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					}
 
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
-
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
 			}
 
 			else if (mp.equals("IN")) {
@@ -1402,30 +1456,25 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
-						"https://www.amazon.in/ap/register/253-5567572-7905465?_encoding=UTF8&openid.assoc_handle=inflex&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.ns.pape=http%3A%2F%2Fspecs.openid.net%2Fextensions%2Fpape%2F1.0&openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.in%2Fgp%2Fyourstore%2Fhome%3Fie%3DUTF8%26ref_%3Dnav_newcust");
+						"https://www.amazon.com/ap/register?_encoding=UTF8&openid.assoc_handle=usflex&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.ns.pape=http%3A%2F%2Fspecs.openid.net%2Fextensions%2Fpape%2F1.0&openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.com%2Fgp%2Fyourstore%2Fhome%3Fie%3DUTF8%26ref_%3Dnav_custrec_newcust");
 				driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 				driver.findElement(By.id("ap_customer_name")).sendKeys(name);
-
-				driver.findElement(By.id("ap_use_email")).click();
 
 				driver.findElement(By.id("ap_email")).sendKeys(emailid);
 
 				driver.findElement(By.id("ap_password")).sendKeys(password);
 
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+				driver.findElement(By.id("ap_password_check")).sendKeys(password);
 
-				}
-				driver.findElement(By.id("continue")).submit();
+				driver.findElement(By.id("continue")).click();
 
-				WebElement accountlist = driver.findElement(By.id("nav-link-yourAccount"));
+				WebElement accountlist = driver.findElement(By.id("nav-link-accountList"));
 
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(accountlist).perform();
 
-				driver.findElement(By.xpath("(//span[text()='Manage Your Content and Devices'])[2]")).click();
+				driver.findElement(By.xpath("(//span[text()='Manage Your Content and Devices'])[1]")).click();
 
 				driver.findElement(By.xpath("//div[text()=' Settings ']")).click();
 
@@ -1447,6 +1496,10 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				actions.moveToElement(zip).click().sendKeys("302033");
 				actions.build().perform();
 
+				WebElement country = driver.findElement(By.xpath("//select[@ng-model='selectedCountryCode']"));
+				Select select = new Select(country);
+				select.selectByIndex(101);
+
 				WebElement phone = driver.findElement(By.id("adr_PhoneNumber"));
 				actions.moveToElement(phone).click().sendKeys("1234567890");
 				actions.build().perform();
@@ -1456,11 +1509,41 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				actions.build().perform();
 
 				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
 
+					e.printStackTrace();
 				}
-				driver.get("https://www.amazon.in/gp/internal/repeat/du/handle.html?action=cust-id");
+
+				// driver.navigate().refresh();
+				driver.findElement(By.xpath("//span[text()=' Edit Payment Method ']")).click();
+
+				driver.findElement(By.xpath("//span[text()='Use this address']")).click();
+
+				driver.findElement(By.xpath("//span[text()='Add a card']")).click();
+
+				driver.findElement(By.name("addCreditCardNumber")).sendKeys("4111111111111111");
+
+				driver.findElement(By.name("accountHolderName")).sendKeys("tester");
+
+				driver.findElement(By.xpath("(//span[@class='a-dropdown-prompt'])[2]")).click();
+
+				driver.findElement(By.linkText("2019")).click();
+
+				driver.findElement(By.xpath("//button[text()='Next']")).click();
+
+				driver.findElement(By.xpath("//span[text()='Use this address']")).click();
+
+				driver.findElement(By.xpath("(//input[contains(@aria-labelledby,'pmts-id-')])[2]"))
+						.sendKeys(Keys.ENTER);
+
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
+				}
+				driver.get("https://www.amazon.com/gp/internal/repeat/du/handle.html?action=cust-id");
 
 				WebElement text = driver.findElement(By.tagName("body"));
 
@@ -1479,75 +1562,82 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
+				if (wl.equals("Yes")) {
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.get("https://maswhitelisting.amazon.com");
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='IN'])[1]")).click();
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
 
-				driver.findElement(By.xpath("(//li[text()='IN'])[1]")).click();
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
+					}
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='US'])[1]")).click();
+
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+
+					driver.findElement(By.xpath("(//li[text()='IN'])[2]")).click();
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='US'])[2]")).click();
+
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+
+					driver.findElement(By.xpath("(//li[text()='IN'])[3]")).click();
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='US'])[3]")).click();
+
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e) {
+
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
 
 				}
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
-				driver.findElement(By.xpath("(//li[text()='US'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
-
-				driver.findElement(By.xpath("(//li[text()='IN'])[2]")).click();
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
+				else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
-				driver.findElement(By.xpath("(//li[text()='US'])[2]")).click();
-
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
-
-				driver.findElement(By.xpath("(//li[text()='IN'])[3]")).click();
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
-				driver.findElement(By.xpath("(//li[text()='US'])[3]")).click();
-
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(3000);
-				} catch (Exception e) {
-
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
 
 			}
-			
+
 			else if (mp.equals("CN")) {
 				System.out.println("Your CN account is Creating Please Wait...");
 				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
@@ -1609,7 +1699,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {
-					
+
 					e.printStackTrace();
 				}
 
@@ -1632,12 +1722,13 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				driver.findElement(By.xpath("//span[text()='Use this address']")).click();
 
-				driver.findElement(By.xpath("(//input[contains(@aria-labelledby,'pmts-id-')])[2]")).sendKeys(Keys.ENTER);
+				driver.findElement(By.xpath("(//input[contains(@aria-labelledby,'pmts-id-')])[2]"))
+						.sendKeys(Keys.ENTER);
 
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e) {
-					
+
 					e.printStackTrace();
 				}
 				driver.get("https://www.amazon.com/gp/internal/repeat/du/handle.html?action=cust-id");
@@ -1649,7 +1740,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				String str[] = ecid.split(" ");
 
 				String str2 = str[3];
-				 ECID = "";
+				ECID = "";
 
 				for (int i = 0; i < str2.length(); i++) {
 					char c = str2.charAt(i);
@@ -1659,55 +1750,58 @@ public class All_Account_Create extends JFrame implements ActionListener {
 					ECID = ECID + c;
 
 				}
-				driver.get("https://maswhitelisting.amazon.com");
+				if (wl.equals("Yes")) {
+					driver.get("https://maswhitelisting.amazon.com");
 
-				driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
+					driver.findElement(By.id("cx_request_ecid_csv")).sendKeys(ECID);
 
-				driver.findElement(By.id("cx_request_agreement")).click();
+					driver.findElement(By.id("cx_request_agreement")).click();
 
-				driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
+					driver.findElement(By.id("cx_request_justification")).sendKeys("QA");
 
-				WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
-				date.click();
+					WebElement date = driver.findElement(By.id("cx_request_expiration_date"));
+					date.click();
 
-				driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
-				expdate = date.getAttribute("value");
-				driver.findElement(By.id("cx_request_whitelist_ids_")).click();
+					driver.findElement(By.xpath("//td[contains(@class,'active')]/../td[1]")).click();
+					expdate = date.getAttribute("value");
+					driver.findElement(By.id("cx_request_whitelist_ids_")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[1]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='CN'])[1]")).click();
+					driver.findElement(By.xpath("(//li[text()='CN'])[1]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[2]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='CN'])[2]")).click();
+					driver.findElement(By.xpath("(//li[text()='CN'])[2]")).click();
 
-				driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
+					driver.findElement(By.xpath("(//ul[@class='chosen-choices'])[3]")).click();
 
-				driver.findElement(By.xpath("(//li[text()='CN'])[3]")).click();
+					driver.findElement(By.xpath("(//li[text()='CN'])[3]")).click();
 
-				driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
+					driver.findElement(By.xpath("//input[@value='Submit Request']")).click();
 
-				try {
-					Thread.sleep(7000);
-				} catch (InterruptedException e) {
-					
-					e.printStackTrace();
+					try {
+						Thread.sleep(7000);
+					} catch (InterruptedException e) {
+
+						e.printStackTrace();
+					}
+
+					driver.navigate().refresh();
+
+					try {
+						Thread.sleep(4000);
+					} catch (InterruptedException e) {
+
+						e.printStackTrace();
+					}
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
+				} else {
+					driver.quit();
+					All_Account_Create.allinfo(name, emailid, password, ECID, "Account is not Whitelisted");
 				}
 
-				driver.navigate().refresh();
-
-				try {
-					Thread.sleep(4000);
-				} catch (InterruptedException e) {
-					
-					e.printStackTrace();
-				}
-				driver.quit();
-				All_Account_Create.allinfo(name, emailid, password, ECID, expdate);
-				
-				
-				
 			}
 
 			else {
@@ -1716,7 +1810,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 			}
 			JFrame myFrame = new JFrame("Account Created Details");
 			myFrame.setVisible(true);
-			myFrame.setBounds(50, 50, 800, 800);
+			myFrame.setBounds(50, 50, 1000, 800);
 
 			JLabel Name = new JLabel("UserName = " + name);
 			Name.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
@@ -1746,12 +1840,21 @@ public class All_Account_Create extends JFrame implements ActionListener {
 			map.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
 			map.setBounds(71, 450, 500, 36);
 			myFrame.add(map);
+			
 
 			JLabel exp = new JLabel("EXP = " + expdate);
 			exp.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
 			exp.setBackground(new Color(204, 204, 204));
 			exp.setBounds(71, 550, 500, 36);
 			myFrame.add(exp);
+
+			JLabel note = new JLabel(
+					"NOTE: For 'IN' and 'CA' account COR & PFM is different. Kindly change manually before using the account");
+			note.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
+			note.setBackground(new Color(204, 204, 204));
+			note.setBounds(71, 650, 900, 36);
+			myFrame.add(note);
+			
 
 			JLabel blank = new JLabel("");
 			blank.setFont(new Font("Georgia", Font.BOLD | Font.ITALIC, 15));
