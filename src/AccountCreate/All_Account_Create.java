@@ -183,7 +183,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 			super.dispose();
 			if (mp.equals("UK")) {
 				System.out.println("Your UK account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -342,7 +342,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("US")) {
 				System.out.println("Your US account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -501,7 +501,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("DE")) {
 				System.out.println("Your DE account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -658,7 +658,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("JP")) {
 				System.out.println("Your JP account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -817,7 +817,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("FR")) {
 				System.out.println("Your FR account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -977,7 +977,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("IT")) {
 				System.out.println("Your IT account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -1137,7 +1137,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("ES")) {
 				System.out.println("Your ES account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -1295,7 +1295,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("CA")) {
 				System.out.println("Your CA account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -1452,7 +1452,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("IN")) {
 				System.out.println("Your IN account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -1474,7 +1474,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				actions.moveToElement(accountlist).perform();
 
-				driver.findElement(By.xpath("(//span[text()='Manage Your Content and Devices'])[1]")).click();
+				driver.findElement(By.xpath("(//span[text()='Your Content and Devices'])[1]")).click();
 
 				driver.findElement(By.xpath("//div[text()=' Settings ']")).click();
 
@@ -1498,7 +1498,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				WebElement country = driver.findElement(By.xpath("//select[@ng-model='selectedCountryCode']"));
 				Select select = new Select(country);
-				select.selectByIndex(101);
+				select.selectByVisibleText("India");
 
 				WebElement phone = driver.findElement(By.id("adr_PhoneNumber"));
 				actions.moveToElement(phone).click().sendKeys("1234567890");
@@ -1640,7 +1640,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 			else if (mp.equals("CN")) {
 				System.out.println("Your CN account is Creating Please Wait...");
-				System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "C:/Account Creation Tool/Account Creation/driver/chromedriver.exe");
 				WebDriver driver = new ChromeDriver();
 				driver.manage().window().maximize();
 				driver.get(
@@ -1662,7 +1662,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				actions.moveToElement(accountlist).perform();
 
-				driver.findElement(By.xpath("(//span[text()='Manage Your Content and Devices'])[1]")).click();
+				driver.findElement(By.xpath("(//span[text()='Your Content and Devices'])[1]")).click();
 
 				driver.findElement(By.xpath("//div[text()=' Settings ']")).click();
 
@@ -1686,7 +1686,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				WebElement country = driver.findElement(By.xpath("//select[@ng-model='selectedCountryCode']"));
 				Select select = new Select(country);
-				select.selectByIndex(43);
+				select.selectByVisibleText("China");
 
 				WebElement phone = driver.findElement(By.id("adr_PhoneNumber"));
 				actions.moveToElement(phone).click().sendKeys("1234567890");
