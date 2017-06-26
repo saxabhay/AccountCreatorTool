@@ -364,7 +364,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 
 				actions.moveToElement(accountlist).perform();
 
-				driver.findElement(By.xpath("(//span[text()='Manage Your Content and Devices'])[1]")).click();
+				driver.findElement(By.xpath("(//span[text()='Your Content and Devices'])[1]")).click();
 
 				driver.findElement(By.xpath("//div[text()=' Settings ']")).click();
 
