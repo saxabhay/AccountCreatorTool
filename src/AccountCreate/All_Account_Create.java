@@ -212,7 +212,7 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				driver.findElement(By.xpath("//span[text()=' Change ']")).click();
 
 				WebElement address1 = driver.findElement(By.id("adr_AddressLine1"));
-				actions.moveToElement(address1).click().sendKeys("3 5 Piccadilly Place");
+				actions.moveToElement(address1).click().sendKeys("60 Holborn Viaduct, London EC1A 2FD, UK");
 				actions.build().perform();
 
 				WebElement city = driver.findElement(By.id("adr_City"));
@@ -220,11 +220,11 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				actions.build().perform();
 
 				WebElement state = driver.findElement(By.id("adr_StateOrRegion"));
-				actions.moveToElement(state).click().sendKeys("GB");
+				actions.moveToElement(state).click().sendKeys("London");
 				actions.build().perform();
 
 				WebElement zip = driver.findElement(By.id("adr_PostalCode"));
-				actions.moveToElement(zip).click().sendKeys("W1J 0DB");
+				actions.moveToElement(zip).click().sendKeys("EC1A 2FD");
 				actions.build().perform();
 
 				WebElement phone = driver.findElement(By.id("adr_PhoneNumber"));
@@ -371,19 +371,19 @@ public class All_Account_Create extends JFrame implements ActionListener {
 				driver.findElement(By.xpath("//span[text()=' Change ']")).click();
 
 				WebElement address1 = driver.findElement(By.id("adr_AddressLine1"));
-				actions.moveToElement(address1).click().sendKeys("40 Pacifica");
+				actions.moveToElement(address1).click().sendKeys("21005 64th Ave S, Kent, WA 98032, USA");
 				actions.build().perform();
 
 				WebElement city = driver.findElement(By.id("adr_City"));
-				actions.moveToElement(city).click().sendKeys("Irvine");
+				actions.moveToElement(city).click().sendKeys("WA");
 				actions.build().perform();
 
 				WebElement state = driver.findElement(By.id("adr_StateOrRegion"));
-				actions.moveToElement(state).click().sendKeys("CA");
+				actions.moveToElement(state).click().sendKeys("WA");
 				actions.build().perform();
 
 				WebElement zip = driver.findElement(By.id("adr_PostalCode"));
-				actions.moveToElement(zip).click().sendKeys("92618");
+				actions.moveToElement(zip).click().sendKeys("98032");
 				actions.build().perform();
 
 				WebElement phone = driver.findElement(By.id("adr_PhoneNumber"));
